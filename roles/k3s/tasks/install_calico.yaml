@@ -1,0 +1,17 @@
+- name: Install Calico CNI
+  when:
+    - inventory_hostname == groups['k3s_servers'][0]
+    - "'--flannel-backend=none' in k3s_exec_args"
+    - "'--disable-network-policy' in k3s_exec_args"
+  block:
+    - name: Download Calico manifest
+      get_url:
+        url: "https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml"
+        dest: "/tmp/calico.yaml"
+        mode: '0644'
+
+    - name: Apply Calico CNI manifest
+      shell: |
+        kubectl apply -f /tmp/calico.yaml
+      environment:
+        KUBECONFIG: /etc/rancher/k3s/k3s.yaml

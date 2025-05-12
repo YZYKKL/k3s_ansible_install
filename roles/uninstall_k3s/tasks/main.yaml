@@ -1,0 +1,12 @@
+- name: Uninstall K3s server (for group k3s_servers)
+  shell: /usr/local/bin/k3s-uninstall.sh
+  args:
+    executable: /bin/bash
+  when: "'k3s_servers' in group_names"
+
+- name: Uninstall K3s agent (for group k3s_agents)
+  shell: /usr/local/bin/k3s-agent-uninstall.sh
+  args:
+    executable: /bin/bash
+  when: "'k3s_agents' in group_names"
+

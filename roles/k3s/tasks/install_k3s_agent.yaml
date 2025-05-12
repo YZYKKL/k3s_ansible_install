@@ -1,0 +1,13 @@
+- name: Install K3s agent on worker nodes
+  when: "'k3s_agents' in group_names"
+  block:
+    - name: Set hostname to match inventory name
+      hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Download and install K3s agent
+      shell: |
+        curl -sfL https://get.k3s.io | K3S_URL={{ k3s_url }} K3S_TOKEN={{ k3s_token }} sh -
+      args:
+        executable: /bin/bash
+

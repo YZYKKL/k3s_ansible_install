@@ -1,0 +1,21 @@
+- name: Install K3s server on master nodes
+  when: "'k3s_servers' in group_names"
+  block:
+    - name: Set hostname to match inventory name
+      hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Install K3s server on the first server (initialize cluster)
+      shell: |
+        curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable traefik --disable metrics-server --datastore-endpoint={{ k3s_datastore_endpoint }} --token={{ k3s_token }}" sh -
+      args:
+        executable: /bin/bash
+      when: inventory_hostname == groups['k3s_servers'][0]
+
+    - name: Install K3s server and join existing server
+      shell: |
+        curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--server {{ k3s_url }} --token={{ k3s_token }} --datastore-endpoint={{ k3s_datastore_endpoint }} --disable traefik --disable metrics-server" sh -
+      args:
+        executable: /bin/bash
+      when: inventory_hostname != groups['k3s_servers'][0]
+

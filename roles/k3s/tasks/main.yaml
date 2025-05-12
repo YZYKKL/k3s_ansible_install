@@ -1,0 +1,4 @@
+# tasks/main.yaml
+- import_tasks: install_k3s_server.yaml
+- import_tasks: install_k3s_agent.yaml
+
