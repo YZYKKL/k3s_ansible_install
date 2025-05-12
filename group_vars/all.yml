@@ -1,0 +1,7 @@
+# ansible-k3s/group_vars/all.yml
+ansible_user: ubuntu
+ansible_ssh_private_key_file: ~/.ssh/ssh.pem
+k3s_token: "mycustomsecuretoken123"
+k3s_url: "https://{{ hostvars[groups['k3s_servers'][0]]['ansible_host'] }}:6443"
+k3s_datastore_endpoint: "mysql://admin:admin@tcp(database-2.cl420qwusf1e.ap-southeast-1.rds.amazonaws.com:3306)/k3s"
+
